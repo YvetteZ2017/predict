@@ -59,6 +59,7 @@ func main() {
 	m := make(map[string]map[string]float64)
 
 	for _,s := range images {
+		//predictC := make(chan *PredictResp)
 		prediction, err := predict(apiKey, s)
 		if err != nil {
 			fmt.Println(err)
@@ -66,6 +67,7 @@ func main() {
 		//fmt.Println(prediction.Outputs[0].Data.Concepts)
 		pred := prediction.Outputs[0].Data.Concepts
 		for _,t := range pred {
+			m[t.Name] = make(map[string]float64)
 			m[t.Name][s] = t.Value
 		}
 
@@ -105,10 +107,6 @@ func predict(api_key string, photo_url string) (*PredictResp, error){
 	if err := json.NewDecoder(resp.Body).Decode(&rb); err != nil {
 		return nil, err
 	}
-
-	//p := rb.Outputs[0].Data.Concepts
-	//fmt.Println(p)
-
 
 	return rb, nil
 }
