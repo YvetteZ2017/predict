@@ -2,8 +2,9 @@ package main
 
 import (
 	"encoding/json"
-	//"encoding/json"
+	"errors"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 	"os"
 	"strings"
@@ -28,15 +29,52 @@ type PredictResp struct {
 	} `json:"outputs"`
 }
 
-func main() {
-	prediction, err := predict(apiKey, "https://samples.clarifai.com/metro-north.jpg")
-	if err != nil {
-		fmt.Println(err)
-	}
-	fmt.Println(prediction)
+type PredictData struct {
+	Name string `json:"name"`
+	Value float64 `json:"value"`
 }
 
-func predict(api_key string, photo_url string) (map[string]float64, error){
+type TagMap struct {
+	TagData struct {
+		Url struct {
+			Value float64
+		}
+	}
+}
+
+
+func check(e error) {
+	if e != nil {
+		panic(e)
+	}
+}
+
+
+func main() {
+
+	imagesData, err := ioutil.ReadFile("images.txt")
+	check(err)
+	images := strings.Split(string(imagesData), "\n")
+
+	m := make(map[string]map[string]float64)
+
+	for _,s := range images {
+		prediction, err := predict(apiKey, s)
+		if err != nil {
+			fmt.Println(err)
+		}
+		//fmt.Println(prediction.Outputs[0].Data.Concepts)
+		pred := prediction.Outputs[0].Data.Concepts
+		for _,t := range pred {
+			m[t.Name][s] = t.Value
+		}
+
+	}
+	fmt.Println(m)
+
+}
+
+func predict(api_key string, photo_url string) (*PredictResp, error){
 	client := &http.Client{}
 
 
@@ -58,14 +96,19 @@ func predict(api_key string, photo_url string) (map[string]float64, error){
 
 	defer resp.Body.Close()
 
-	var rb PredictResp
+	if resp.StatusCode != http.StatusOK {
+		return nil, errors.New(resp.Status)
+	}
+
+	var rb *PredictResp
 
 	if err := json.NewDecoder(resp.Body).Decode(&rb); err != nil {
 		return nil, err
 	}
 
-	p := rb.Outputs[0].Data.Concepts
-	
-	fmt.Println(p)
-	return nil, nil
+	//p := rb.Outputs[0].Data.Concepts
+	//fmt.Println(p)
+
+
+	return rb, nil
 }
