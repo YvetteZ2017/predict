@@ -135,7 +135,7 @@ func buildMap(imageFilePath string) { // build the tagMap with imageFile, save a
 		}
 		sort.Sort(sort.Reverse(pl))
 
-		newMap[tag] = pl
+		newMap[strings.ToLower(tag)] = pl
 	}
 
 	b, err := json.Marshal(newMap)
@@ -211,7 +211,7 @@ func main() {
 	buildPtr  := flag.Bool("build", false, "build the image tag-map with command -build [path to the image_url .txt file")
 
 
-	searchPtr := flag.String("search", "nature", "keyword")
+	searchPtr := flag.String("search", "", "keyword")
 	flag.Parse()
 	imageFilePathInput := flag.Args()
 
@@ -224,12 +224,15 @@ func main() {
 		buildMap(imageFilePath)
 	}
 
-	tagMapFromJson := readMapFromJson("tagMap.json")
+	if *searchPtr != "" {
+		tagMapFromJson := readMapFromJson("tagMap.json")
 
-	urlList := searchKeyword(*searchPtr, tagMapFromJson)
+		urlList := searchKeyword(strings.ToLower(*searchPtr), tagMapFromJson)
+
+		fmt.Println(urlList)
+	}
 
 
-	fmt.Println(urlList)
 
 	elapsed := time.Since(start)
 	fmt.Println(elapsed)
