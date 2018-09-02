@@ -85,14 +85,18 @@ func buildMap(imageFilePath string) { // build the tagMap with imageFile, save a
 
 	predictChan := make(chan *PredictResp, 100)
 
+	rate := time.Second / 7
+	throttle := time.Tick(rate)
+
 	var wg sync.WaitGroup
 	for _,s := range images {
 		wg.Add(1)
+		<-throttle
 		go predict(apiKey, s, predictChan, &wg)
 	}
 	go func() {
-		defer close(predictChan)
 		wg.Wait()
+		close(predictChan)
 	}()
 
 	for prediction := range predictChan {
