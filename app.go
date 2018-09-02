@@ -8,6 +8,8 @@ import (
 	"net/http"
 	"os"
 	"strings"
+	"sync"
+	"time"
 )
 
 
@@ -19,6 +21,13 @@ type PredictResp struct {
 		Description string `json:"description"`
 	} `json:"status"`
 	Outputs []struct {
+		Input struct {
+			Data struct {
+				Image struct {
+					Url string `json:"url"`
+				} `json:"image"`
+			} `json:"data"`
+		} `json:"input"`
 		Data struct {
 			Concepts []struct {
 				Id string `json:"id"`
@@ -29,54 +38,58 @@ type PredictResp struct {
 	} `json:"outputs"`
 }
 
-type PredictData struct {
-	Name string `json:"name"`
-	Value float64 `json:"value"`
-}
-
-type TagMap struct {
-	TagData struct {
-		Url struct {
-			Value float64
-		}
-	}
-}
-
-
-func check(e error) {
-	if e != nil {
-		panic(e)
-	}
-}
-
 
 func main() {
+	start := time.Now()
 
 	imagesData, err := ioutil.ReadFile("images.txt")
-	check(err)
+	if err != nil {
+		panic(err)
+	}
 	images := strings.Split(string(imagesData), "\n")
 
 	m := make(map[string]map[string]float64)
 
-	for _,s := range images {
-		//predictC := make(chan *PredictResp)
-		prediction, err := predict(apiKey, s)
-		if err != nil {
-			fmt.Println(err)
-		}
-		//fmt.Println(prediction.Outputs[0].Data.Concepts)
-		pred := prediction.Outputs[0].Data.Concepts
-		for _,t := range pred {
-			m[t.Name] = make(map[string]float64)
-			m[t.Name][s] = t.Value
-		}
+	predictChan := make(chan *PredictResp, 500)
 
+	var wg sync.WaitGroup
+	for _,s := range images {
+		wg.Add(1)
+		go predict(apiKey, s, predictChan, &wg)
+	}
+	go func() {
+		defer close(predictChan)
+		wg.Wait()
+	}()
+
+	for prediction := range predictChan {
+		pred := prediction.Outputs[0].Data.Concepts
+		url := prediction.Outputs[0].Input.Data.Image.Url
+		for _,t := range pred {
+			if _, ok := m[t.Name]; ok {
+				m[t.Name][url] = t.Value
+			} else {
+				m[t.Name] = make(map[string]float64)
+				m[t.Name][url] = t.Value
+			}
+		}
+	}
+
+	var a int
+	for k := range m {
+		if len(m[k]) > 10 {
+			a++
+		}
 	}
 	fmt.Println(m)
+	fmt.Println(a)
 
+	elapsed := time.Since(start)
+	fmt.Println(elapsed)
 }
 
-func predict(api_key string, photo_url string) (*PredictResp, error){
+func predict(api_key string, photo_url string, c chan *PredictResp, wg *sync.WaitGroup) (error){
+	defer wg.Done()
 	client := &http.Client{}
 
 
@@ -86,27 +99,29 @@ func predict(api_key string, photo_url string) (*PredictResp, error){
 
 	req, err := http.NewRequest("POST", api_url, strings.NewReader(data_body))
 	if err != nil {
-		return nil, err
+		return err
 	}
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Authorization", "Key " + api_key)
 
 	resp, err := client.Do(req)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return nil, errors.New(resp.Status)
+		return errors.New(resp.Status)
 	}
 
 	var rb *PredictResp
 
 	if err := json.NewDecoder(resp.Body).Decode(&rb); err != nil {
-		return nil, err
+		return err
 	}
 
-	return rb, nil
+	c <- rb
+
+	return nil
 }
