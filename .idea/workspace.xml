@@ -2,9 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="697cce00-e44b-4a04-ac53-55e3de9ce2ba" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/public/index.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/readme.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app.go" beforeDir="false" afterPath="$PROJECT_DIR$/app.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tagMap.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test.txt" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -24,9 +26,10 @@
         <counts>
           <entry key="go" value="12" />
           <entry key="gtpl" value="1" />
-          <entry key="html" value="2" />
+          <entry key="html" value="3" />
           <entry key="js" value="1" />
           <entry key="json" value="2" />
+          <entry key="md" value="1" />
           <entry key="s" value="1" />
         </counts>
       </usages-collector>
@@ -34,30 +37,32 @@
         <counts>
           <entry key="Go" value="12" />
           <entry key="Go template" value="1" />
-          <entry key="HTML" value="2" />
+          <entry key="HTML" value="3" />
           <entry key="JSON" value="2" />
           <entry key="JavaScript" value="1" />
+          <entry key="PLAIN_TEXT" value="1" />
           <entry key="x86 Plan9 Assembly" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="go" value="5781" />
+          <entry key="go" value="5899" />
           <entry key="gtpl" value="36" />
-          <entry key="html" value="469" />
+          <entry key="html" value="470" />
           <entry key="js" value="257" />
           <entry key="json" value="1" />
+          <entry key="md" value="1002" />
           <entry key="txt" value="146" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="Go" value="5781" />
+          <entry key="Go" value="5899" />
           <entry key="Go template" value="36" />
-          <entry key="HTML" value="469" />
+          <entry key="HTML" value="470" />
           <entry key="JSON" value="1" />
           <entry key="JavaScript" value="257" />
-          <entry key="PLAIN_TEXT" value="146" />
+          <entry key="PLAIN_TEXT" value="1148" />
         </counts>
       </usages-collector>
     </session>
@@ -67,8 +72,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="350">
-              <caret line="205" column="39" lean-forward="true" selection-start-line="205" selection-start-column="39" selection-end-line="205" selection-end-column="39" />
+            <state relative-caret-position="1576">
+              <caret line="237" selection-start-line="237" selection-end-line="237" />
               <folding>
                 <element signature="e#14#37#0" expanded="true" />
               </folding>
@@ -77,13 +82,10 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/public/index.html">
+        <entry file="file://$PROJECT_DIR$/readme.md">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="165">
-              <caret line="11" column="27" lean-forward="true" selection-start-line="11" selection-start-column="27" selection-end-line="11" selection-end-column="27" />
-              <folding>
-                <element signature="n#style#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-              </folding>
+            <state relative-caret-position="315">
+              <caret line="21" column="136" lean-forward="true" selection-start-line="21" selection-start-column="136" selection-end-line="21" selection-end-column="136" />
             </state>
           </provider>
         </entry>
@@ -123,9 +125,10 @@
         <option value="$PROJECT_DIR$/search.go" />
         <option value="$PROJECT_DIR$/templates/index.html" />
         <option value="$PROJECT_DIR$/index.gtpl" />
-        <option value="$PROJECT_DIR$/app.go" />
         <option value="$PROJECT_DIR$/public/script.js" />
         <option value="$PROJECT_DIR$/public/index.html" />
+        <option value="$PROJECT_DIR$/app.go" />
+        <option value="$PROJECT_DIR$/readme.md" />
       </list>
     </option>
   </component>
@@ -174,6 +177,12 @@
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
   </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/resource" />
+    </key>
+  </component>
   <component name="RunDashboard">
     <option name="ruleStates">
       <list>
@@ -215,7 +224,7 @@
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32970297" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.32970297" />
-      <window_info active="true" anchor="bottom" id="Debug" order="3" visible="true" weight="0.4" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -358,7 +367,7 @@ a</expression-string>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/tagMap.json">
+    <entry file="file://$PROJECT_DIR$/resource/tagMap.json">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-6349">
           <caret line="75" column="6" selection-start-line="75" selection-start-column="6" selection-end-line="75" selection-end-column="6" />
@@ -368,23 +377,27 @@ a</expression-string>
     <entry file="file://$PROJECT_DIR$/public/script.js">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
+    <entry file="file://$PROJECT_DIR$/public/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="330">
+          <caret line="22" column="10" selection-start-line="22" selection-start-column="10" selection-end-line="22" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="350">
-          <caret line="205" column="39" lean-forward="true" selection-start-line="205" selection-start-column="39" selection-end-line="205" selection-end-column="39" />
+        <state relative-caret-position="1576">
+          <caret line="237" selection-start-line="237" selection-end-line="237" />
           <folding>
             <element signature="e#14#37#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/index.html">
+    <entry file="file://$PROJECT_DIR$/readme.md">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="11" column="27" lean-forward="true" selection-start-line="11" selection-start-column="27" selection-end-line="11" selection-end-column="27" />
-          <folding>
-            <element signature="n#style#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-          </folding>
+        <state relative-caret-position="315">
+          <caret line="21" column="136" lean-forward="true" selection-start-line="21" selection-start-column="136" selection-end-line="21" selection-end-column="136" />
         </state>
       </provider>
     </entry>

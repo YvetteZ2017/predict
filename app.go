@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"errors"
 	"flag"
-	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -16,7 +15,7 @@ import (
 )
 
 
-var apiKey = os.Getenv("API_KEY")
+var apiKey = os.Getenv("PREDICT_API_KEY")
 
 var myLog = log.New(os.Stderr, "app: ", log.LstdFlags | log.Lshortfile)
 
@@ -208,7 +207,6 @@ func searchHandler(w http.ResponseWriter, r *http.Request) {
 
 
 func main() {
-	start := time.Now()
 
 	buildPtr  := flag.Bool("build", false, "build the image tag-map with command -build [path to the image_url .txt file")
 
@@ -218,23 +216,24 @@ func main() {
 
 
 	if *buildPtr {
+		log.Println("Start building the tag map")
 		imageFilePath := "imagest.txt"
 		if len(imageFilePathInput) > 0 {
 			imageFilePath = imageFilePathInput[0]
 		}
 		buildMap(imageFilePath)
+		log.Println("Finished building the tag map")
 	}
 
 	tagMap = readMapFromJson("tagMap.json")
 
-
+	log.Println("Listening to http://localhost:5000")
 	http.Handle("/", http.FileServer(http.Dir("./public")))
 	http.HandleFunc("/search", searchHandler)
 	err := http.ListenAndServe(":5000", nil)
+
 	if err != nil {
 		myLog.Fatal(err)
 	}
 
-	elapsed := time.Since(start)
-	fmt.Println(elapsed)
 }
