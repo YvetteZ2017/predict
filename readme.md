@@ -6,6 +6,9 @@
 Copy project folder to /usr/local/src then build the app using
 `go build predict`
 
+*Environment Variable*
+Set the environment variable `PREDICT_API_KEY` with your own Clarifai API key.
+
 *Run the app*
 Firstly build the tag-mapping json file with:
 `go run predict -build [Default=images.txt | path to the image-url .txt file]`
