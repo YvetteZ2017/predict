@@ -20,6 +20,8 @@ var apiKey = os.Getenv("API_KEY")
 
 var myLog = log.New(os.Stderr, "app: ", log.LstdFlags | log.Lshortfile)
 
+var tagMap TagMap
+
 type PredictResp struct {
 	Status struct{
 		Code int `json:"code"`
@@ -112,17 +114,6 @@ func buildMap(imageFilePath string) { // build the tagMap with imageFile, save a
 		}
 	}
 
-	// check m
-	a := 0
-	for k := range m {
-		if len(m[k]) > 10 {
-			a++
-		}
-	}
-	fmt.Println(a)
-
-	//
-
 	newMap := make(map[string][]Pair)
 
 	for tag, url := range m {
@@ -152,9 +143,9 @@ func buildMap(imageFilePath string) { // build the tagMap with imageFile, save a
 
 }
 
-func searchKeyword(keyword string, tagMap TagMap) []string {
+func searchKeyword(keyword string, tMap TagMap) []string {
 	var temp []string
-	if val, ok := tagMap[keyword]; ok {
+	if val, ok := tMap[keyword]; ok {
 		bound := 10
 
 		if len(val) < bound {
@@ -205,13 +196,23 @@ func predict(api_key string, photo_url string, c chan *PredictResp, wg *sync.Wai
 }
 
 
+func searchHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != "GET" {
+		myLog.Println(errors.New("method is not supported in /search endpoint: " + r.Method))
+	}
+
+	tagName := r.FormValue("tagName")
+	urlList := searchKeyword(tagName, tagMap)
+	json.NewEncoder(w).Encode(&urlList)
+}
+
+
 func main() {
 	start := time.Now()
 
 	buildPtr  := flag.Bool("build", false, "build the image tag-map with command -build [path to the image_url .txt file")
 
 
-	searchPtr := flag.String("search", "", "keyword")
 	flag.Parse()
 	imageFilePathInput := flag.Args()
 
@@ -224,15 +225,15 @@ func main() {
 		buildMap(imageFilePath)
 	}
 
-	if *searchPtr != "" {
-		tagMapFromJson := readMapFromJson("tagMap.json")
+	tagMap = readMapFromJson("tagMap.json")
 
-		urlList := searchKeyword(strings.ToLower(*searchPtr), tagMapFromJson)
 
-		fmt.Println(urlList)
+	http.Handle("/", http.FileServer(http.Dir("./public")))
+	http.HandleFunc("/search", searchHandler)
+	err := http.ListenAndServe(":5000", nil)
+	if err != nil {
+		myLog.Fatal(err)
 	}
-
-
 
 	elapsed := time.Since(start)
 	fmt.Println(elapsed)
